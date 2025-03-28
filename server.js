@@ -2,21 +2,25 @@
 require('dotenv').config();
 
 
-//imports
+//imports server-database-routes
 const express = require('express');
 const connectToDB = require('./database/db.js');
+const bookRoutes = require('./routes/book-routes.js')
 
 // creating express server
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 
-//connecting to DB
+// connecting to DB
 connectToDB();
 
 
 // middleware express.json
 app.use(express.json());
+
+// parent routes
+app.use('/api/books', bookRoutes);
 
 
 
