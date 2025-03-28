@@ -102,12 +102,78 @@ const addNewBook = async (req, res) => {
 };
 
 
-const updateBookById = async( req, res ) => {
+const updateBookById = async (req, res) => {
+    try {
+        const bookId = req.params.id;
 
+        // Validate ObjectId length
+        if (bookId.length !== 24) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid book ID format. It must be a 24-character hex string."
+            });
+        }
+
+        // Update book and return the updated document
+        const updatedBook = await BookModel.findByIdAndUpdate(
+            bookId,
+            req.body,
+            { new: true, runValidators: true }
+        );
+
+        // Check if book exists and was updated
+        if (!updatedBook) {
+            return res.status(404).json({
+                success: false,
+                message: "No book found to update"
+            });
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: "Book updated successfully",
+            data: updatedBook
+        });
+
+    } catch (error) {
+        console.error("Error Occurred:", error);
+
+        return res.status(500).json({
+            success: false,
+            message: "An error occurred while updating the book",
+            error: error.message
+        });
+    }
 };
 
-const deleteBookById = async( req, res ) => {
 
+
+const deleteBookById = async( req, res ) => {
+    try {
+        const bookId = req.params.id;
+        if(bookId.length !== 24){
+            throw new Error("Input must be a 24-character hex string.");
+        };
+
+        const deletedBook = await BookModel.findByIdAndDelete(bookId);
+
+        if(deletedBook){
+            res.status(200).json({
+                success : true,
+                message : "Book Deleted successfully form collection",
+                data : deletedBook
+            });
+        };
+
+    } catch (error) {
+        console.log('Error occured while deleting book:', error);
+
+        res.status(500).json({
+            success : false,
+            message : "Internal server error occures while deleting book from collection",
+            data : error.message
+        })
+    }
 };
 
 module.exports = {
