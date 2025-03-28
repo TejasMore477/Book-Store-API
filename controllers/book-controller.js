@@ -64,13 +64,14 @@ const getSingleBookById = async (req, res) => {
     }
 };
 
+
 const addNewBook = async (req, res) => {
     try {
         // Check if required fields exist in req.body
-        if (!req.body.title || !req.body.author || !req.body.genre) {
+        if (!req.body.title || !req.body.author || !req.body.year) {
             return res.status(400).json({
                 success: false,
-                message: "Missing required fields: title, author, or genre"
+                message: "Missing required fields: title, author, or year"
             });
         }
 
