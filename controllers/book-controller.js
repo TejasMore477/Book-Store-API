@@ -1,7 +1,25 @@
 const BookModel = require('../models/book.js');
 
 const getAllBooks = async( req, res ) => {
-
+    try {
+        const allBooks = await BookModel.find({});
+        if(allBooks?.length > 0){
+            res.status(200).json({
+                success : true,
+                message : "Getting all Books successfully",
+                data : allBooks
+            })
+        }else{
+            res.status(404).json({
+                success : false,
+                message : "no Books found in collection",
+            })
+        };
+        
+    } catch (error) {
+        console.log("\n Error Occured while getting all books:\n", error);
+        
+    };
 };
 
 const getSingleBookById = async( req, res ) => {
