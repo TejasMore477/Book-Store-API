@@ -116,8 +116,8 @@ const updateBookById = async (req, res) => {
 
         // Update book and return the updated document
         const updatedBook = await BookModel.findByIdAndUpdate(
-            bookId,
-            req.body,
+            bookId,// take the book id to update
+            req.body,// whatnare the updates
             { new: true, runValidators: true }
         );
 
